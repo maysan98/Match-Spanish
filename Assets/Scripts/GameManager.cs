@@ -1,5 +1,7 @@
 using TMPro;
 using UnityEngine;
+using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -7,9 +9,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] TMP_Text findsTextBox;
     [SerializeField] GameObject winScreen;
     private int score = 0;
+    public static GameManager instance;
     void Awake()
     {
-    findsTextBox.text = "Finds: " + score;
+        instance = this;
+        findsTextBox.text = "Finds: " + score;
     }
     public void AddFinds()
     {
@@ -20,7 +24,17 @@ public class GameManager : MonoBehaviour
     {
         if (score == numOfWords)
         {
-           winScreen.SetActive(true);
+            StartCoroutine(WonGame());
         }
+
     }
+
+    IEnumerator WonGame()
+    {
+        winScreen.SetActive(true);
+        yield return new WaitForSeconds(5);
+        SceneManager.LoadScene(0);
+    }
+
+    
 }
